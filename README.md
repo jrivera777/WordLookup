@@ -1,15 +1,15 @@
 # Word Lookup Widget
 
-## Purpose:
+### Purpose:
 
 Often while writing I forget how to spell a word, either because it's one of
 those tricky words that never stick in my mind or because it's a "fancy" word,
 not often used. I also sometimes have the problem where I use a word, but then
 become paranoid that I am using it incorrectly, so I want to know the definition.
 
-Because of my apparently inability to use the English language effectively,
+Because of my apparent inability to use the English language effectively,
 I find myself constantly going to google.com to look up the word using Google's
-dictionary definition feature `define *word*` It displays the word definition,
+dictionary definition feature `define word` It displays the word definition,
 spelling, pronunciation, and more. Good stuff. 
 
 As nice as that is, it's a pain if I don't have a browser open for
