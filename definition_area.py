@@ -7,7 +7,6 @@ class DefinitionArea(tk.Frame):
     def __init__(self, master=None, word='word goes here'):
         tk.Frame.__init__(self, master)
         self.CreateDefinitionArea('test')
-        print(self.wordFont)
     
     def CreateDefinitionArea(self, word):
         self._wordControl = tk.StringVar()
@@ -20,8 +19,13 @@ class DefinitionArea(tk.Frame):
         self._wordControl.set(word)
         self._definitionControl.set('definition goes here.')
 
-
     def Display(self):
         self._wordLabel.grid()
         self._definitionLabel.grid()
         self.grid(sticky=tk.W + tk.E)
+
+    def setWord(self, newWord):
+        self._wordControl.set(newWord)
+    
+    def setDefinition(self, newDef):
+        self._definitionControl.set(newDef)
