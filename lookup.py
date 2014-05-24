@@ -11,8 +11,8 @@ class LookUpApplication(tk.Frame):
         self.CreateControlVars()
         self.CreatePrimaryTextArea(50)
         self.BindEvents()
-        self._defArea = DefinitionArea(master=self)
-        self._defArea.Display()
+        self._defArea = DefinitionArea(master=self, colspan=2)
+        self._defArea.Display(False)
 
     def setupWordnik(self):
         self.__apiKey = ' 44c913e6611b3f875994500746a0302819bb02d4ba3ee7dfc'
@@ -32,24 +32,33 @@ class LookUpApplication(tk.Frame):
         self._wordBoxLabel = tk.Label(self, text='Lookup:')
         self._wordBox = tk.Entry(self, width=w, textvariable=self._word)
         # self.BindEvents()
-        self._wordBoxLabel.grid(row=0, column=0)
-        self._wordBox.grid(row=0,column=1)
+        self._wordBoxLabel.grid(row=0, column=0, sticky=tk.W)
+        self._wordBox.grid(row=0,column=1, sticky=tk.W + tk.E)
 
     ''' Events for different widgets
     '''
 
     def LookupOnReturnKey(self, event):
-        wd = self._word.get()
+        self._defArea.clearDefinitions()
+        wd = self._word.get().lower()
         if wd != '':
             self._word.set('')
-            self._defArea.setWord('')
-            self._defArea.setDefinition('')
             hyphenation = self.__wordnik.getHyphenation(wd)
-            if hyphenation != None:
-                hyphWord =  '\xb7'.join(map(lambda syl: syl.text, hyphenation))
-                self._defArea.setWord(hyphWord)
-            
-            
+            definitions = self.__wordnik.getDefinitions(wd, limit=3)
+
+            if definitions != None:
+                for df in definitions:
+                    self._defArea.addDefinition(df.partOfSpeech, df.text)
+                if hyphenation != None:
+                    hyphWord = '\xb7'.join([syl.text for syl in hyphenation])
+                    self._defArea.setWord(hyphWord)
+                else:
+                    self._defArea.setWord(wd)
+                self._defArea.Display(True)
+            else:
+                self._defArea.Display(False)
+        else:
+            self._defArea.Display(False)
             
 if __name__ == "__main__":
     app = LookUpApplication()
