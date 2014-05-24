@@ -13,6 +13,7 @@ class LookUpApplication(tk.Frame):
         self.BindEvents()
         self._defArea = DefinitionArea(master=self, colspan=2)
         self._defArea.Display(False)
+        self._wordBox.focus_set()
 
     def setupWordnik(self):
         self.__apiKey = ' 44c913e6611b3f875994500746a0302819bb02d4ba3ee7dfc'
@@ -21,7 +22,6 @@ class LookUpApplication(tk.Frame):
     # Create any control variables necessary
     def CreateControlVars(self):
         self._word = tk.StringVar()
-
     
     # Bind events to widgets
     def BindEvents(self):
@@ -35,20 +35,46 @@ class LookUpApplication(tk.Frame):
         self._wordBoxLabel.grid(row=0, column=0, sticky=tk.W)
         self._wordBox.grid(row=0,column=1, sticky=tk.W + tk.E)
 
+
     ''' Events for different widgets
     '''
-
     def LookupOnReturnKey(self, event):
         self._defArea.clearDefinitions()
         wd = self._word.get().lower()
         if wd != '':
             self._word.set('')
-            hyphenation = self.__wordnik.getHyphenation(wd)
-            definitions = self.__wordnik.getDefinitions(wd, limit=3)
 
-            if definitions != None:
-                for df in definitions:
-                    self._defArea.addDefinition(df.partOfSpeech, df.text)
+            hyphenation = self.__wordnik.getHyphenation(wd)
+            definitionNouns = self.__wordnik.getDefinitions(wd, partOfSpeech='noun', limit=2)
+            definitionVerbs = self.__wordnik.getDefinitions(wd, partOfSpeech='verb', limit=2)
+            definitionAdjs = self.__wordnik.getDefinitions(wd, partOfSpeech='adjective', limit=2)
+
+            types = 4
+            if definitionNouns != None:
+                types -= 1
+            if definitionVerbs != None:
+                types -= 1
+            if definitionAdjs != None:
+                types -= 1
+
+            showWord = False
+            if definitionNouns != None:
+                showWord = True
+                for i in range(min(types, len(definitionNouns))):
+                    self._defArea.addDefinition(definitionNouns[i].partOfSpeech,
+                                                definitionNouns[i].text)
+            if definitionVerbs != None:
+                showWord = True
+                for i in range(min(types, len(definitionVerbs))):
+                    self._defArea.addDefinition(definitionVerbs[i].partOfSpeech,
+                                                definitionVerbs[i].text)
+            if definitionAdjs != None:
+                showWord = True
+                for i in range(min(types, len(definitionAdjs))):
+                    self._defArea.addDefinition(definitionAdjs[i].partOfSpeech,
+                                                definitionAdjs[i].text)
+
+            if showWord:
                 if hyphenation != None:
                     hyphWord = '\xb7'.join([syl.text for syl in hyphenation])
                     self._defArea.setWord(hyphWord)

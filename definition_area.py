@@ -9,7 +9,7 @@ class DefinitionArea(tk.Frame):
         tk.Frame.__init__(self, master)
         self.__span = colspan
         self.__definitions = []
-        # self['bg'] = '#00ffff'
+#        self['bg'] = '#00ffff'
         self.CreateDefinitionArea()
     
     def CreateDefinitionArea(self):
@@ -24,12 +24,8 @@ class DefinitionArea(tk.Frame):
 
             for df in self.__definitions:
                 df.winfo_children()[0].grid(column=1) # display part of speech
-                df.winfo_children()[1].grid(column=2)# display definition
-                df.grid()
-                # for wdg in df.winfo_children():
-                #     print(wdg['text'])
-                #     wdg.grid()
-                    
+                df.winfo_children()[1].grid(column=2, sticky=tk.W + tk.E)# display definition
+                df.grid(sticky=tk.W + tk.E)
         else:
             self.grid_remove()
 
@@ -39,7 +35,8 @@ class DefinitionArea(tk.Frame):
     def addDefinition(self, posp, newDef):
         defnFrame = tk.Frame(self)
         poSpeech = tk.Label(defnFrame, text=posp, font=self.pospFont)
-        singleDef = tk.Label(defnFrame, text=newDef, font=self.definitionFont)
+        singleDef = tk.Label(defnFrame, text=newDef, font=self.definitionFont,
+                             wraplength='90m', justify=tk.LEFT)
         self.__definitions.append(defnFrame)
         
     def clearDefinitions(self):
@@ -47,5 +44,4 @@ class DefinitionArea(tk.Frame):
             df.grid_forget()
             df.destroy()
         del self.__definitions[:]
-        
-        
+                
