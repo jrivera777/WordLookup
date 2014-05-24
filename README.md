@@ -20,3 +20,7 @@ All this may seem stupid or boring, but there is a second, equally
 important goal: learn and become more comfortable using python. I have limited
 experience with it, and I know it's all the rage now, so I might as well catch
 up.
+
+Here is what it looks like so far:
+
+![alt text](WLex.png "Ultra-fancy!")
